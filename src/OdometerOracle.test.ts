@@ -1,4 +1,4 @@
-import { OracleExample } from './CreditScoreOracle';
+import { OdometerVerifier } from './OdometerOracle';
 import {
   Field,
   Mina,
@@ -12,19 +12,19 @@ let proofsEnabled = false;
 
 // The public key of our trusted data provider
 const ORACLE_PUBLIC_KEY =
-  'B62qoAE4rBRuTgC42vqvEyUqCGhaZsW58SKVW4Ht8aYqP9UTvxFWBgy';
+  'B62qjxToGLu3bgpmdmNxmhdozJQDEAU4N26pWkWzjDsXbszwqjdaHMo';
 
-describe('OracleExample', () => {
+describe('OdometerVerifier', () => {
   let deployerAccount: PublicKey,
     deployerKey: PrivateKey,
     senderAccount: PublicKey,
     senderKey: PrivateKey,
     zkAppAddress: PublicKey,
     zkAppPrivateKey: PrivateKey,
-    zkApp: OracleExample;
+    zkApp: OdometerVerifier;
 
   beforeAll(async () => {
-    if (proofsEnabled) await OracleExample.compile();
+    if (proofsEnabled) await OdometerVerifier.compile();
   });
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe('OracleExample', () => {
       Local.testAccounts[1]);
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
-    zkApp = new OracleExample(zkAppAddress);
+    zkApp = new OdometerVerifier(zkAppAddress);
   });
 
   async function localDeploy() {
@@ -49,24 +49,24 @@ describe('OracleExample', () => {
     await txn.sign([deployerKey, zkAppPrivateKey]).send();
   }
 
-  it('generates and deploys the `OracleExample` smart contract', async () => {
+  it('generates and deploys the `OdometerVerifier` smart contract', async () => {
     await localDeploy();
     const oraclePublicKey = zkApp.oraclePublicKey.get();
     expect(oraclePublicKey).toEqual(PublicKey.fromBase58(ORACLE_PUBLIC_KEY));
   });
 
   describe('hardcoded values', () => {
-    it('emits an `id` event containing the users id if their credit score is above 700 and the provided signature is valid', async () => {
+    it('emits an `id` event containing the users id if their odometer reading is below 8000 and the provided signature is valid', async () => {
       await localDeploy();
 
-      const id = Field(1);
-      const creditScore = Field(787);
+      const id = Field(4);
+      const odometer = Field(4680);
       const signature = Signature.fromBase58(
-        '7mXGPCbSJUiYgZnGioezZm7GCy46CEUbgcCH9nrJYXQQiwwVrA5wemBX4T1XFHUw62oR2324QNnkUVXW6yYQLsPsqxZ3nsYR'
+        '7mXS3yAGHddQBu3NpLooyRLtYsTo8vzainHMJAsVPbFWwZxjXVDkwjegnbdd2PgVCyxD5odRHADbsTQ2XYY6cBa2oFGraJq2'
       );
 
       const txn = await Mina.transaction(senderAccount, () => {
-        zkApp.verify(id, creditScore, signature);
+        zkApp.verify(id, odometer, signature);
       });
       await txn.prove();
       await txn.sign([senderKey]).send();
@@ -76,54 +76,54 @@ describe('OracleExample', () => {
       expect(verifiedEventValue).toEqual(id);
     });
 
-    it('throws an error if the credit score is below 700 even if the provided signature is valid', async () => {
+    it('throws an error if the odometer reading is above 8000 even if the provided signature is valid', async () => {
       await localDeploy();
 
-      const id = Field(1);
-      const creditScore = Field(536);
+      const id = Field(2);
+      const odometer = Field(65832);
       const signature = Signature.fromBase58(
-        '7mXXnqMx6YodEkySD3yQ5WK7CCqRL1MBRTASNhrm48oR4EPmenD2NjJqWpFNZnityFTZX5mWuHS1WhRnbdxSTPzytuCgMGuL'
+        '7mXWHLaN3dEVgaGVFxHvFGREMbGqtVznNS4TqxmVJ6vcJwgGsqETikyRahw2EJhLreuvKHupfLzfoUoS7bK75a27qMWJP1Sn'
       );
 
       expect(async () => {
         const txn = await Mina.transaction(senderAccount, () => {
-          zkApp.verify(id, creditScore, signature);
+          zkApp.verify(id, odometer, signature);
         });
       }).rejects;
     });
 
-    it('throws an error if the credit score is above 700 and the provided signature is invalid', async () => {
+    it('throws an error if the odometer reading is below 8000 and the provided signature is invalid', async () => {
       await localDeploy();
 
-      const id = Field(1);
-      const creditScore = Field(787);
+      const id = Field(2);
+      const odometer = Field(5612);
       const signature = Signature.fromBase58(
-        '7mXPv97hRN7AiUxBjuHgeWjzoSgL3z61a5QZacVgd1PEGain6FmyxQ8pbAYd5oycwLcAbqJLdezY7PRAUVtokFaQP8AJDEGX'
+        '7mXWHLaN3dEVgaGVFxHvFGREMbGqtVznNS4TqxmVJ6vcJwgGsqETikyRahw2EJhLreuvKHupfLzfoUoS7bK75a27qMWJP1Sn'
       );
 
       expect(async () => {
         const txn = await Mina.transaction(senderAccount, () => {
-          zkApp.verify(id, creditScore, signature);
+          zkApp.verify(id, odometer, signature);
         });
       }).rejects;
     });
   });
 
   describe('actual API requests', () => {
-    it('emits an `id` event containing the users id if their credit score is above 700 and the provided signature is valid', async () => {
+    it('emits an `id` event containing the vehicle id if their odometer reading is below 8000 and the provided signature is valid', async () => {
       await localDeploy();
 
       const response = await fetch(
-        'https://07-oracles.vercel.app/api/credit-score?user=1'
+        'https://zk-mile-enders-projects.vercel.app/api/vehicle_data?id=4'
       );
       const data = await response.json();
 
-      const id = Field(data.data.id);
-      const creditScore = Field(data.data.creditScore);
+      const id = Field(data.vehicle_data.id);
+      const odometer = Field(data.vehicle_data.vehicle_state.odometer);
       const signature = Signature.fromBase58(data.signature);
 
       const txn = await Mina.transaction(senderAccount, () => {
-        zkApp.verify(id, creditScore, signature);
+        zkApp.verify(id, odometer, signature);
       });
       await txn.prove();
       await txn.sign([senderKey]).send();
@@ -133,23 +133,24 @@ describe('OracleExample', () => {
       expect(verifiedEventValue).toEqual(id);
     });
 
-    it('throws an error if the credit score is below 700 even if the provided signature is valid', async () => {
+    it('throws an error if the vehicle id if their odometer reading is above 8000 even if the provided signature is valid', async () => {
       await localDeploy();
 
       const response = await fetch(
-        'https://07-oracles.vercel.app/api/credit-score?user=2'
+        'https://zk-mile-enders-projects.vercel.app/api/vehicle_data?id=2'
       );
       const data = await response.json();
 
-      const id = Field(data.data.id);
-      const creditScore = Field(data.data.creditScore);
+      const id = Field(data.vehicle_data.id);
+      const odometer = Field(data.vehicle_data.vehicle_state.odometer);
       const signature = Signature.fromBase58(data.signature);
 
       expect(async () => {
         const txn = await Mina.transaction(senderAccount, () => {
-          zkApp.verify(id, creditScore, signature);
+          zkApp.verify(id, odometer, signature);
         });
       }).rejects;
     });
+
   });
 });
