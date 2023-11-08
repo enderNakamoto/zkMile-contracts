@@ -10,24 +10,23 @@ import {
     MerkleWitness, 
     Poseidon
   } from 'o1js';
-import { FieldConst } from 'o1js/dist/node/lib/field';
   
   // The public key of our trusted data provider
   const ORACLE_PUBLIC_KEY =
     'B62qjxToGLu3bgpmdmNxmhdozJQDEAU4N26pWkWzjDsXbszwqjdaHMo';
 
-
+  // adding the ability to track mileage of 2^4 = 16 cars
   export const treeHeight = 4;
   export class MerkleWitness4 extends MerkleWitness(treeHeight) {}
 
-  export class Song extends Struct({
+  export class Car extends Struct({
     carId: Field,
     lastOdometer: Field,
     timestamp: Field,
-    miles: Field
+    milesLastMonth: Field
   }){
     calculateMiles(odometer: Field){
-      this.miles = odometer.sub(this.lastOdometer)
+      this.milesLastMonth = odometer.sub(this.lastOdometer)
       this.lastOdometer = odometer
       this.timestamp = Field(Date.now())
     };
@@ -37,7 +36,7 @@ import { FieldConst } from 'o1js/dist/node/lib/field';
   export class OdometerVerifier extends SmartContract {
     // Define contract state
     @state(PublicKey) oraclePublicKey = State<PublicKey>();
-
+    @state(Field) treeRoot = State<Field>();
 
     // Define contract events
     events = {
@@ -53,6 +52,27 @@ import { FieldConst } from 'o1js/dist/node/lib/field';
         this.requireSignature();
     }
   
+    @method initMerkleTree(initialRoot: Field){
+      this.treeRoot.set(initialRoot);
+    }
+
+    @method updateMiles(car: Car, path: MerkleWitness4, odometer: Field){
+      // get the tree root 
+      const treeRoot = this.treeRoot.getAndAssertEquals();
+
+      // check to see if the car is in merkle tree
+      const carRoot = path.calculateRoot(Poseidon.hash(Car.toFields(car)));
+      carRoot.assertEquals(treeRoot);
+
+      // calculate miles
+      car.calculateMiles(odometer)
+
+      // include udpated miles and update tree root
+      const newCarRoot = path.calculateRoot(Poseidon.hash(Car.toFields(car)));
+      this.treeRoot.set(newCarRoot);
+    }
+
+
     @method verify(id: Field, odometer: Field, signature: Signature) {
       // Get the oracle public key from the contract state
         const oraclePublicKey = this.oraclePublicKey.get();
