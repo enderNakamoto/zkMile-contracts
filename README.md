@@ -34,6 +34,9 @@ We also want to scale this protocol, and for this we use a Merkle Tree. For the 
 
 The entire cpntract only needs to store two states: The public key to verify the signature of the oracle and the merkle tree root. 
 
+![image](https://github.com/enderNakamoto/zkMile-contracts/assets/68520496/0ebe4045-4455-4c92-bb9b-daf33e303777)
+
+
 ## How to run tests
 
 We also included tests for the contract, to run the test simply use the following command: 
