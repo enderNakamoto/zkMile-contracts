@@ -1,4 +1,13 @@
 {
   "version": 1,
-  "deployAliases": {}
+  "deployAliases": {
+    "berkeley": {
+      "url": "https://proxy.berkeley.minaexplorer.com/graphql",
+      "keyPath": "keys/berkeley.json",
+      "feepayerKeyPath": "/Users/sauravdhar/.cache/zkapp-cli/keys/zkmile-deployer.json",
+      "feepayerAlias": "zkmile-deployer",
+      "fee": "0.1",
+      "smartContract": "OdometerVerifier"
+    }
+  }
 }

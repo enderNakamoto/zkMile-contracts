@@ -206,8 +206,9 @@ describe('OdometerVerifier', () => {
         });
       }).rejects;
     });
+  });
 
-
+  describe('Merkle Tree stores data correctly', () => {
     it('correctly calculates miles for a car, total miles is tracked, and tree root changes correctly', async () => {
       await localDeploy();
   
@@ -253,6 +254,6 @@ describe('OdometerVerifier', () => {
       expect(calculated).toEqual(false);
   
     });
-
   });
+  
 });
