@@ -22,13 +22,12 @@ import {
   export class Car extends Struct({
     carId: Field,
     lastOdometer: Field,
-    timestamp: Field,
     milesLastMonth: Field
   }){
     calculateMiles(odometer: Field){
       this.milesLastMonth = odometer.sub(this.lastOdometer)
       this.lastOdometer = odometer
-      this.timestamp = Field(Date.now())
+      return this.milesLastMonth
     };
   }
 
@@ -37,6 +36,7 @@ import {
     // Define contract state
     @state(PublicKey) oraclePublicKey = State<PublicKey>();
     @state(Field) treeRoot = State<Field>();
+    @state(Field) totalMilesTracked = State<Field>();
 
     // Define contract events
     events = {
@@ -65,7 +65,10 @@ import {
       carRoot.assertEquals(treeRoot);
 
       // calculate miles
-      car.calculateMiles(odometer)
+      const milesToAdd = car.calculateMiles(odometer)
+
+      // update total miles tracked 
+      this.totalMilesTracked.set(this.totalMilesTracked.getAndAssertEquals().add(milesToAdd));
 
       // include udpated miles and update tree root
       const newCarRoot = path.calculateRoot(Poseidon.hash(Car.toFields(car)));
