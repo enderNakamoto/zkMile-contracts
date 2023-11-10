@@ -1,3 +1,3 @@
-import { OracleExample } from './OdometerOracle.js';
+import { OdometerVerifier } from './OdometerOracle.js';
 
-export { OracleExample };
+export { OdometerVerifier };
