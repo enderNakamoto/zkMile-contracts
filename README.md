@@ -50,32 +50,35 @@ npm run test
 [Apache-2.0](LICENSE)
 
 ---
-## Logging Time Spent on Research 
----
 
-
-### 9th November - Egaml 
-Tried to store Odometer value on Merkle Tree leaf, and try to make it private, to do so, I found a possible way to do it with homomorphic encryption. I found this implementation by Florian - https://github.com/Trivo25/o1js-elgamal
-Isage of this libtrary is pretty straighforward , however still it does not solve the issue. 
-###### Unsolved Issue
-There is `ElGamalECC` implementation and `ElGamalFF` implementation, however none of those can do subtraction ( which is my usecase)
+## Record of Time Allocated to Research Activities
 
 ---
 
-### 25th Nov - Implementation of OffChain storage of Merkle Tree 
+### November 9th - Exploring ElGamal Encryption
 
-Straightforeard implementation, however I ran into an issue. It just could be me
-###### Unsolved Issue 
-I could not store Poseidon Hash of a Struct in the leaf of the merkle Tree 
+Investigated incorporating odometer readings into a Merkle Tree leaf while maintaining privacy. Explored homomorphic encryption as a solution, referencing Florian's implementation ([ElGamal implementation](https://github.com/Trivo25/o1js-elgamal)). The library usage is straightforward, yet it fails to address my specific need.
+
+**Unresolved Issue:**
+Both the `ElGamalECC` and `ElGamalFF` versions are available, but neither supports subtraction, which is crucial for my application.
 
 ---
-### 26th Nov - Tried to Calculate distance between two coordinates (lat ,lon)
 
-Could not find a way to do change Decimal value to  Field , let alone use something like HAversine formula to find the distance between two co-rodinates, which requires trigonometric calculations. 
+### November 25th - OffChain Merkle Tree Storage Implementation
 
-I did find this implementation -  https://github.com/yunus433/snarkyjs-math, this is in SnarkyJs, and needs to be updated to O1js 
+The implementation process was direct, but I encountered an obstacle. It might be an error on my part.
 
-and a discussion - https://discord.com/channels/484437221055922177/1163471192158634075
+**Unresolved Issue:**
+Struggling to store the Poseidon Hash of a Struct in a Merkle Tree leaf.
 
-Trying to unpack this 
+**Potential Contribution Opportunity:**
+Developing a Redis-based offchain storage solution accessible to zkApp users.
+
 ---
+
+### November 26th - Calculating Distance Between Coordinates (Latitude, Longitude)
+
+Faced challenges in converting decimal values to Field, hindering the use of the Haversine formula for distance calculation. Discovered a relevant implementation in SnarkyJs ([SnarkyJs math](https://github.com/yunus433/snarkyjs-math)) and a related discussion ([SnarkyJs discussion](https://discord.com/channels/484437221055922177/1163471192158634075)). This implementation, however, needs updating to O1js.
+
+**Potential Contribution Opportunity:**
+Updating the SnarkyJs math library to O1js standards.
