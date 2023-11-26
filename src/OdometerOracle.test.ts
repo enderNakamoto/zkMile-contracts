@@ -121,7 +121,7 @@ describe('OdometerVerifier', () => {
       );
 
       const txn = await Mina.transaction(senderAccount, () => {
-        zkApp.verify(id, odometer, signature);
+        zkApp.verifyOdometer(id, odometer, signature);
       });
       await txn.prove();
       await txn.sign([senderKey]).send();
@@ -142,7 +142,7 @@ describe('OdometerVerifier', () => {
 
       expect(async () => {
         const txn = await Mina.transaction(senderAccount, () => {
-          zkApp.verify(id, odometer, signature);
+          zkApp.verifyOdometer(id, odometer, signature);
         });
       }).rejects;
     });
@@ -158,7 +158,7 @@ describe('OdometerVerifier', () => {
 
       expect(async () => {
         const txn = await Mina.transaction(senderAccount, () => {
-          zkApp.verify(id, odometer, signature);
+          zkApp.verifyOdometer(id, odometer, signature);
         });
       }).rejects;
     });
@@ -178,7 +178,7 @@ describe('OdometerVerifier', () => {
       const signature = Signature.fromBase58(data.signature);
 
       const txn = await Mina.transaction(senderAccount, () => {
-        zkApp.verify(id, odometer, signature);
+        zkApp.verifyOdometer(id, odometer, signature);
       });
       await txn.prove();
       await txn.sign([senderKey]).send();
@@ -202,7 +202,7 @@ describe('OdometerVerifier', () => {
 
       expect(async () => {
         const txn = await Mina.transaction(senderAccount, () => {
-          zkApp.verify(id, odometer, signature);
+          zkApp.verifyOdometer(id, odometer, signature);
         });
       }).rejects;
     });

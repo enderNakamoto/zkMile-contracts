@@ -76,7 +76,36 @@ import {
     }
 
 
-    @method verify(id: Field, odometer: Field, signature: Signature) {
+    @method verifyDistance(
+      id: Field, 
+      latitude: Field, 
+      longitude: Field,
+      odometer: Field,
+      signature: Signature)
+    {
+      // Get the oracle public key from the contract state
+      const oraclePublicKey = this.oraclePublicKey.get();
+      this.oraclePublicKey.assertEquals(oraclePublicKey);
+
+      // Evaluate whether the signature is valid for the provided data
+      const validSignature = signature.verify(oraclePublicKey, [id, odometer]);
+
+      // Check that the signature is valid
+      validSignature.assertTrue();
+
+      // !! Research!! 
+      // Ran into two issues here 
+      // Trying to calculate distance between two co-ordinates (lat, lon)
+      // Decimal to Field is not well talked about in Mina docs 
+      // Found the library - https://github.com/yunus433/snarkyjs-math
+      // This needs to be converted to O1js from snarkyjs implementation 
+      // looking for alternate methods, 
+      //perhaps this can be taken care of by a Google API call 
+      // Then we trust Google 
+
+    }
+
+    @method verifyOdometer(id: Field, odometer: Field, signature: Signature) {
       // Get the oracle public key from the contract state
         const oraclePublicKey = this.oraclePublicKey.get();
         this.oraclePublicKey.assertEquals(oraclePublicKey);
