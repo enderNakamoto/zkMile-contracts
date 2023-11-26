@@ -49,21 +49,26 @@ npm run test
 
 [Apache-2.0](LICENSE)
 
-
+---
 ## Logging Time Spent on Research 
+---
+
 
 ### 9th November - Egaml 
 Tried to store Odometer value on Merkle Tree leaf, and try to make it private, to do so, I found a possible way to do it with homomorphic encryption. I found this implementation by Florian - https://github.com/Trivo25/o1js-elgamal
 Isage of this libtrary is pretty straighforward , however still it does not solve the issue. 
-**Unsolved Issue**
+###### Unsolved Issue
 There is `ElGamalECC` implementation and `ElGamalFF` implementation, however none of those can do subtraction ( which is my usecase)
 
+---
 
 ### 25th Nov - Implementation of OffChain storage of Merkle Tree 
 
 Straightforeard implementation, however I ran into an issue. It just could be me
-**Unsolved Issue** - could not store Poseidon Hash of a Struct in the leaf of the merkle Tree 
+###### Unsolved Issue 
+I could not store Poseidon Hash of a Struct in the leaf of the merkle Tree 
 
+---
 ### 26th Nov - Tried to Calculate distance between two coordinates (lat ,lon)
 
 Could not find a way to do change Decimal value to  Field , let alone use something like HAversine formula to find the distance between two co-rodinates, which requires trigonometric calculations. 
@@ -73,4 +78,4 @@ I did find this implementation -  https://github.com/yunus433/snarkyjs-math, thi
 and a discussion - https://discord.com/channels/484437221055922177/1163471192158634075
 
 Trying to unpack this 
-
+---
