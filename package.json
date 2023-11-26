@@ -39,6 +39,8 @@
     "o1js": "^0.13.1"
   },
   "dependencies": {
-    "o1js-elgamal": "^0.0.10"
+    "experimental-zkapp-offchain-storage": "^0.2.0",
+    "o1js-elgamal": "^0.0.10",
+    "xmlhttprequest-ts": "^1.0.1"
   }
 }

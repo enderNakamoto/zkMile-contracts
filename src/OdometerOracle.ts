@@ -88,7 +88,7 @@ import {
       // Check that the signature is valid
       validSignature.assertTrue();
 
-      // Check that the provided credit score is less than 8000
+      // Check that the provided odometer value is less than 8000
       odometer.assertLessThanOrEqual(Field(8000));
 
       // Emit an event containing the verified vehicle id
