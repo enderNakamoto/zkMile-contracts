@@ -82,3 +82,14 @@ Faced challenges in converting decimal values to Field, hindering the use of the
 
 **Potential Contribution Opportunity:**
 Updating the SnarkyJs math library to O1js standards.
+
+---
+
+### November 27th - Basic Experimentation of Mina Native Tokens
+
+Used Tutorial to mint basic tokens and understand how mina native tokens work. Also looked ta Mina Token API to see what is possible. 
+
+Next research - look at example Dex to see how an ZkApp can interact with a Mina Native Token
+
+**Potential Contribution Opportunity:**
+Updating the SnarkyJs math library to O1js standards.
