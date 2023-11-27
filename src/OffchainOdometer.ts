@@ -64,62 +64,62 @@ export class OdometerContract extends SmartContract {
         this.storageTreeRoot.set(emptyTreeRoot);
     }
 
-    @method updateMiles(
-        car: Car, 
-        path: MerkleWitness8, 
-        odometer: Field,
-        leafIsEmpty: Bool,
-        storedNewRootNumber: Field,
-        storedNewRootSignature: Signature
-    ){
-        const storedRoot = this.storageTreeRoot.get();
-        this.storageTreeRoot.assertEquals(storedRoot);
+    // @method updateMiles(
+    //     car: Car, 
+    //     path: MerkleWitness8, 
+    //     odometer: Field,
+    //     leafIsEmpty: Bool,
+    //     storedNewRootNumber: Field,
+    //     storedNewRootSignature: Signature
+    // ){
+    //     const storedRoot = this.storageTreeRoot.get();
+    //     this.storageTreeRoot.assertEquals(storedRoot);
     
-        let storedNumber = this.storageNumber.get();
-        this.storageNumber.assertEquals(storedNumber);
+    //     let storedNumber = this.storageNumber.get();
+    //     this.storageNumber.assertEquals(storedNumber);
     
-        let storageServerPublicKey = this.storageServerPublicKey.get();
-        this.storageServerPublicKey.assertEquals(storageServerPublicKey);
+    //     let storageServerPublicKey = this.storageServerPublicKey.get();
+    //     this.storageServerPublicKey.assertEquals(storageServerPublicKey);
   
-        // check to see if the car is in merkle tree
-        const carRoot = path.calculateRoot(Poseidon.hash(Car.toFields(car)));
-        carRoot.assertEquals(storedRoot);
+    //     // check to see if the car is in merkle tree
+    //     const carRoot = path.calculateRoot(Poseidon.hash(Car.toFields(car)));
+    //     carRoot.assertEquals(storedRoot);
 
-        // car before calculation of miles
-        let leaf = [Poseidon.hash(Car.toFields(car))];
+    //     // car before calculation of miles
+    //     let leaf = [Poseidon.hash(Car.toFields(car))];
         
-        // calculate miles
-        const milesToAdd = car.calculateMiles(odometer)
+    //     // calculate miles
+    //     const milesToAdd = car.calculateMiles(odometer)
 
-        // car after calculation of miles
-        let newLeaf = [Poseidon.hash(Car.toFields(car))];
+    //     // car after calculation of miles
+    //     let newLeaf = [Poseidon.hash(Car.toFields(car))];
 
-        // update total miles tracked 
-        this.totalMilesTracked.set(this.totalMilesTracked.getAndAssertEquals().add(milesToAdd));
+    //     // update total miles tracked 
+    //     this.totalMilesTracked.set(this.totalMilesTracked.getAndAssertEquals().add(milesToAdd));
 
-        // include udpated miles and update tree root
-        const updates = [
-          {
-            leaf,
-            leafIsEmpty,
-            newLeaf,
-            newLeafIsEmpty: Bool(false),
-            leafWitness: path,
-          },
-        ];
+    //     // include udpated miles and update tree root
+    //     const updates = [
+    //       {
+    //         leaf,
+    //         leafIsEmpty,
+    //         newLeaf,
+    //         newLeafIsEmpty: Bool(false),
+    //         leafWitness: path,
+    //       },
+    //     ];
 
-        const storedNewRoot = OffChainStorage.assertRootUpdateValid(
-          storageServerPublicKey,
-          storedNumber,
-          storedRoot,
-          updates,
-          storedNewRootNumber,
-          storedNewRootSignature
-        );
+    //     const storedNewRoot = OffChainStorage.assertRootUpdateValid(
+    //       storageServerPublicKey,
+    //       storedNumber,
+    //       storedRoot,
+    //       updates,
+    //       storedNewRootNumber,
+    //       storedNewRootSignature
+    //     );
 
-        this.storageTreeRoot.set(storedNewRoot);
-        this.storageNumber.set(storedNewRootNumber);
-      }
+    //     this.storageTreeRoot.set(storedNewRoot);
+    //     this.storageNumber.set(storedNewRootNumber);
+    //   }
   
     @method verify(id: Field, odometer: Field, signature: Signature) {
         // Get the oracle public key from the contract state
