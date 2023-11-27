@@ -89,7 +89,7 @@ Updating the SnarkyJs math library to O1js standards.
 
 Used Tutorial to mint basic tokens and understand how mina native tokens work. Also looked ta Mina Token API to see what is possible. 
 
-Next research - look at example Dex to see how an ZkApp can interact with a Mina Native Token
+Next research - look at example ([DEX](https://github.com/o1-labs/o1js/tree/main/src/examples/zkapps/dex)) to see how an ZkApp can interact with a Mina Native Token
 
 **Potential Contribution Opportunity:**
 Updating the SnarkyJs math library to O1js standards.
