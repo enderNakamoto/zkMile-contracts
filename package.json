@@ -36,11 +36,10 @@
     "typescript": "^4.7.2"
   },
   "peerDependencies": {
-    "o1js": "^0.13.1"
+    "o1js": "0.14.*"
   },
   "dependencies": {
     "experimental-zkapp-offchain-storage": "^0.2.0",
-    "o1js-elgamal": "^0.0.10",
     "xmlhttprequest-ts": "^1.0.1"
   }
 }
