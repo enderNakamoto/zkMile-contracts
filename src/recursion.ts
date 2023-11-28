@@ -45,7 +45,6 @@ const Add = ZkProgram({
 
 
 async function main() {
-
   console.log('o1js loaded');
 
   console.log('compiling...');

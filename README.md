@@ -90,3 +90,10 @@ Updating the SnarkyJs math library to O1js standards.
 Used Tutorial to mint basic tokens and understand how mina native tokens work. Also looked ta Mina Token API to see what is possible. 
 
 Next research - look at example ([DEX](https://github.com/o1-labs/o1js/tree/main/src/examples/zkapps/dex)) to see how an ZkApp can interact with a Mina Native Token
+
+### November 28th - Basic Experimentation with Recursion 
+
+Ran through tutorial to learn about basic recursion wiyth O1js, struggled a bit with O1 js versions. 
+
+Also, submitted pull request for an issue I came across in the tutorial
+https://github.com/o1-labs/docs2/pull/764
